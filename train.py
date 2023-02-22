@@ -16,11 +16,11 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('using: ', device)
 
 # define model parameters
-NUM_EPOCHS = 20  # original paper 90
+NUM_EPOCHS = 50  # original paper 90
 BATCH_SIZE = 64
 #MOMENTUM = 0.9
 #LR_DECAY = 0.0005
-LR_INIT = 0.01
+LR_INIT = 0.0001
 IMAGE_DIM = 227  # pixels
 NUM_CLASSES = 1000
 DEVICE_IDS = [0, 1, 2, 3]  # GPUs to use
@@ -62,9 +62,9 @@ def train_loop(model,loss_fn,optimizer,dataloader):
         if batch % 10 == 0:
                 loss, current = loss.item(), (batch + 1) * len(imgs)
                 #accuracy for the current batch
-                acc = (correct / len(imgs)) * 100
+                acc = (correct / len(imgs)) 
         
-                print(f"\tLoss: {loss:.4f} \tAccuracy {acc:.3f}% \t[{current}/{size}]")
+                print(f"\tLoss: {loss:.4f} \tAccuracy {acc:.3f} \t[{current}/{size}]")
         
         
     
@@ -76,6 +76,7 @@ def train_loop(model,loss_fn,optimizer,dataloader):
 def val_loop(model,loss_fn,dataloader):
     running_loss =0
     running_correct= 0
+    model.eval()
     with torch.no_grad(): 
         for batch, (imgs, classes) in enumerate(dataloader):
             correct = 0
@@ -89,13 +90,14 @@ def val_loop(model,loss_fn,dataloader):
 
             if batch % 10 == 0:
                 #accuracy for the current batch
-                acc = (correct / len(imgs)) * 100
-                print(f"\tVal Loss: {loss.item():.4f} Val Accuracy: {acc:.4f}%  ")
+                acc = (correct / len(imgs)) 
+                print(f"\tVal Loss: {loss.item():.4f} Val Accuracy: {acc:.4f}  ")
 
     epoch_val_accuracy= running_correct / len(dataloader)
     #print(f'validation accuracy:{accuracy*100.00}%')    
     epoch_val_loss = running_loss/len(dataloader)
     #print(f"Epoch val loss")
+    model.train()
     return epoch_val_accuracy, epoch_val_loss
 
 
@@ -140,7 +142,7 @@ if __name__ == '__main__':
         val_loss_list.append(val_loss)
         train_acc_list.append(train_accuracy)
         val_acc_list.append(val_accuracy)
-        print(f"Epoch: {epoch+1} Avg Train Loss:{train_loss :.4f}  Train Accuracy: {train_accuracy:.3f}%, Avg Val Loss:{val_loss:.4f}  Val Accuracy: {val_accuracy:.3f}% \n")
+        print(f"Epoch: {epoch+1} Avg Train Loss:{train_loss :.4f}  Train Accuracy: {train_accuracy:.3f}, Avg Val Loss:{val_loss:.4f}  Val Accuracy: {val_accuracy:.3f} \n")
         
         save_best_model(val_loss, epoch, model, optimizer, criterion)
         
