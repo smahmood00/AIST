@@ -21,10 +21,11 @@ class SaveBestModel:
                 'model_state_dict': model.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'loss': criterion,
+                'best_val_loss' : self.best_val_loss,
                 }, 'outputs/best_model.pt')
 
 
-def save_model(epochs, model, optimizer, criterion):
+def save_model(epochs, model, optimizer, criterion,val_loss):
     """
     Function to save the trained model to disk.
     """
@@ -34,6 +35,7 @@ def save_model(epochs, model, optimizer, criterion):
                 'model_state_dict': model.state_dict(),
                 'optimizer_state_dict': optimizer.state_dict(),
                 'loss': criterion,
+                'val_loss' : val_loss,
                 }, 'outputs/final_model.pt')
 
 
