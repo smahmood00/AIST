@@ -8,7 +8,7 @@ from torch.utils import data
 
 from datasets import create_dataset, create_dataloader #function from datasets.py 
 from model import AlexNet #class from model.py 
-from utils import save_model,save_plots, SaveBestModel
+from utils import save_model,save_plots, SaveBestModel #functions and class from utils.py 
 
 
 # define pytorch device 
@@ -16,7 +16,7 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print('using: ', device)
 
 # define model parameters
-NUM_EPOCHS = 50  # original paper 90
+NUM_EPOCHS = 100  # original paper 90
 BATCH_SIZE = 64
 #MOMENTUM = 0.9
 #LR_DECAY = 0.0005
@@ -93,10 +93,9 @@ def val_loop(model,loss_fn,dataloader):
                 acc = (correct / len(imgs)) 
                 print(f"\tVal Loss: {loss.item():.4f} Val Accuracy: {acc:.4f}  ")
 
-    epoch_val_accuracy= running_correct / len(dataloader)
-    #print(f'validation accuracy:{accuracy*100.00}%')    
+    epoch_val_accuracy = running_correct / len(dataloader)   
     epoch_val_loss = running_loss/len(dataloader)
-    #print(f"Epoch val loss")
+ 
     model.train()
     return epoch_val_accuracy, epoch_val_loss
 
@@ -129,10 +128,8 @@ if __name__ == '__main__':
     # start training
     print('Starting training...')
 
-    train_loss_list = []
-    val_loss_list = []
-    train_acc_list = []
-    val_acc_list = []
+    train_loss_list = [], val_loss_list = []
+    train_acc_list = [], val_acc_list = []
     for epoch in range(NUM_EPOCHS):
         #lr_scheduler.step()
         print(f"Epoch: {epoch+1}")
@@ -148,7 +145,7 @@ if __name__ == '__main__':
         
         print('-'*50)
 
-    save_model(NUM_EPOCHS, model, optimizer, criterion)
+        save_model(epoch+1, model, optimizer, criterion,val_loss)
 
     save_plots(train_acc_list, val_acc_list, train_loss_list, val_loss_list)
     
