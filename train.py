@@ -128,8 +128,10 @@ if __name__ == '__main__':
     # start training
     print('Starting training...')
 
-    train_loss_list = [], val_loss_list = []
-    train_acc_list = [], val_acc_list = []
+    train_loss_list = []
+    val_loss_list = []
+    train_acc_list = []
+    val_acc_list = []
     for epoch in range(NUM_EPOCHS):
         #lr_scheduler.step()
         print(f"Epoch: {epoch+1}")
@@ -145,7 +147,7 @@ if __name__ == '__main__':
         
         print('-'*50)
 
-        save_model(epoch+1, model, optimizer, criterion,val_loss)
+        save_model(epoch, model, optimizer, criterion,val_loss)
 
     save_plots(train_acc_list, val_acc_list, train_loss_list, val_loss_list)
     
